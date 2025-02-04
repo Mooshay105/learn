@@ -1,0 +1,10 @@
+[
+	{
+		"defaultTitle": "Title",
+		"defaultIdNumber": "1"
+	},
+	{
+		"openAIModel": "tts-1",
+		"openAIVoice": "alloy"
+	}
+]
