@@ -1,14 +1,15 @@
 from pathlib import Path
 from openai import OpenAI
+import json
 
 configFilePath = Path(__file__).parent / "config.json"
 with configFilePath.open("r", encoding="utf-8") as file:
     config = json.load(file)
 
-openAIModel = config[0]["openAIModel"]
-openAIVoice = config[0]["openAIVoice"]
-defaultTitle = config[0]["defaultTitle"]
-defaultIdNumber = config[0]["defaultIdNumber"]
+openAIModel = config["openAIModel"]
+openAIVoice = config["openAIVoice"]
+defaultTitle = config["defaultTitle"]
+defaultIdNumber = config["defaultIdNumber"]
 
 client = OpenAI()
 
