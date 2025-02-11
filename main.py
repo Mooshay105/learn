@@ -1,6 +1,7 @@
 from pathlib import Path
 from openai import OpenAI
 import json
+import subprocess
 
 configFilePath = Path(__file__).parent / "config.json"
 with configFilePath.open("r", encoding="utf-8") as file:
@@ -75,5 +76,28 @@ for i, chunk in enumerate(chunks):
     )
     response.stream_to_file(speechFilePath)
     printf(f"Audio file {i+1} of {len(chunks)} generated.", "INFO")
+
+if len(chunks) > 1:
+    filesPath = "files.txt"
+    with open(filesPath, "w") as f:
+        for i, chunk in enumerate(chunks):
+            f.write(f"file '{title} {idNumber} Part {i+1} of {len(chunks)}.mp3'\n")
+
+
+    # Run FFmpeg to concatenate
+    printf("Running FFmpeg to concatenate audio files...", "INFO")
+    with open("/dev/null", "w") as devnull:
+        subprocess.run(
+            ["ffmpeg", "-f", "concat", "-safe", "0", "-i", filesPath, "-c", "copy", f"{title} {idNumber}.mp3"],
+            stdout=devnull, stderr=devnull, check=True
+	    )
+    printf(f"Audio file {title} {idNumber}.mp3 generated.", "INFO")
+
+    # Delete the files
+    printf("Deleting old audio files...", "INFO")
+    for i, chunk in enumerate(chunks):
+        filePath = Path(__file__).parent / f"{title} {idNumber} Part {i+1} of {len(chunks)}.mp3"
+        filePath.unlink()
+    printf("Old audio files deleted successfully.", "INFO")
 
 printf("Audio files generated successfully.", "INFO")
