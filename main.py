@@ -17,26 +17,26 @@ inputFilePath = Path(__file__).parent / "text.txt"
 with inputFilePath.open("r", encoding="utf-8") as file:
     text = file.read()
 
-def printf(text, process, type):
-    print(f"[TTS: {process}] [{type}]: {text}")
+def printf(text, type):
+    print(f"[TTS] [{type}]: {text}")
 
-printf(f"Enter Title Text ({defaultTitle}): ", "Main", "INFO")
+printf(f"Enter Title Text ({defaultTitle}): ", "INFO")
 title = input()
 
 if len(title) == 0:
     title = defaultTitle
 
-printf(f"Enter ID Number ({defaultIdNumber}): ", "Main", "INFO")
+printf(f"Enter ID Number ({defaultIdNumber}): ", "INFO")
 idNumber = input()
 
 if len(idNumber) == 0:
     idNumber = defaultIdNumber
 
-printf(f"Title Text: {title}", "Main", "INFO")
-printf(f"ID Number: {idNumber}", "Main", "INFO")
+printf(f"Title Text: {title}", "INFO")
+printf(f"ID Number: {idNumber}", "INFO")
 
 def splitTextIntoChunks(text):
-    printf("Splitting text into chunks of 4000 characters...", "Chunker", "INFO")
+    printf("Splitting text into chunks of 4000 characters...", "INFO")
     words = text.split()
     chunks = []
     currentChunk = []
@@ -54,14 +54,14 @@ def splitTextIntoChunks(text):
     if currentChunk:
         chunks.append(" ".join(currentChunk))
 
-    printf("Text split into chunks successfully.", "Chunker", "INFO")
+    printf("Text split into chunks successfully.", "INFO")
 
     return chunks
 
 chunks = splitTextIntoChunks(text)
 
 for i, chunk in enumerate(chunks):
-    printf(f"Generating audio file {i+1} of {len(chunks)}...", "TTS System", "INFO") 
+    printf(f"Generating audio file {i+1} of {len(chunks)}...", "INFO") 
     part = ""
 
     if len(chunks) > 1:
@@ -74,6 +74,6 @@ for i, chunk in enumerate(chunks):
         input=chunk
     )
     response.stream_to_file(speechFilePath)
-    printf(f"Audio file {i+1} of {len(chunks)} generated.", "TTS System", "INFO")
+    printf(f"Audio file {i+1} of {len(chunks)} generated.", "INFO")
 
-printf("Audio files generated successfully.", "Main", "INFO")
+printf("Audio files generated successfully.", "INFO")
