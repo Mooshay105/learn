@@ -9,6 +9,7 @@ with configFilePath.open("r", encoding="utf-8") as file:
 
 openAIModel = config["openAIModel"]
 openAIVoice = config["openAIVoice"]
+openAIInstructions = config["openAIInstructions"]
 defaultTitle = config["defaultTitle"]
 defaultIdNumber = config["defaultIdNumber"]
 
@@ -69,12 +70,19 @@ for i, chunk in enumerate(chunks):
         part = f" Part {i+1} of {len(chunks)}"
 
     speechFilePath = Path(__file__).parent / f"{title} {idNumber}{part}.mp3"
-    response = client.audio.speech.create(
+    #response = client.audio.speech.create(
+    #    model=openAIModel,
+    #    voice=openAIVoice,
+    #    input=chunk
+    #)
+    #response.stream_to_file(speechFilePath)
+    with client.audio.speech.with_streaming_response.create(
         model=openAIModel,
         voice=openAIVoice,
-        input=chunk
-    )
-    response.stream_to_file(speechFilePath)
+        input=chunk,
+        instructions=openAIInstructions
+    ) as response:
+        response.stream_to_file(speechFilePath)
     printf(f"Audio file {i+1} of {len(chunks)} generated.", "INFO")
 
 if len(chunks) > 1:

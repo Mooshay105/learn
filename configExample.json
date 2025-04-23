@@ -1,6 +1,7 @@
 {
 	"defaultTitle": "Title",
 	"defaultIdNumber": "1",
-	"openAIModel": "tts-1",
-	"openAIVoice": "alloy"
+	"openAIModel": "gpt-4o-mini-tts",
+	"openAIVoice": "alloy",
+	"openAIInstructions": "Speak in a cheerful and positive tone."
 }
